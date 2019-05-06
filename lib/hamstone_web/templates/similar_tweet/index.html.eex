@@ -1,0 +1,112 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>Dashboard Template · Bootstrap</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      
+      input[type=text]{
+        width:200px;
+        padding:8px 10px;
+      }
+
+      td em {
+        background:#ff6;
+        font-weight:bold;
+        font-style:normal;
+      }
+    </style>
+
+    <script> </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-nav navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+      <div id="container" style="margin: 0 auto; min-width: 200px;">
+        <div id="container" style="inner-margin: 5px;">
+          <img src="<%= Routes.static_path(@conn, "/images/Hambat.png") %>" class="rounded float-left" style="width: 50px;">
+        </div>
+        <a class="display-4 text-white text-center text-decoration-none" href=<%= Routes.page_path(@conn, :index) %>>Hamstone</a>
+      </div>
+    </nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <main role="main" class="col ml-sm-auto px-4">
+
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Similar Tweets</h1>
+      </div>
+
+      <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto">
+          <div id="row justify-content-center" ><h1 class="display-1 text-center">#<%= @shingle_count%> Shingles Recorded</h1>
+          <div class="container" style="height: 100px;"></div>
+          <div class="row text-center">
+            <div class="w-100"></div>
+          </div>
+      </div>
+
+      <div class="table">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Tweet ID</th> 
+              <th scope="col">User</th>
+              <th scope="col">Content</th>
+              <th scope="col">Similarity</th>
+              <th scale="col" style="min-width: 150px;">Matched Shingles</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= for {tweet, shingles} <- Enum.zip(@tweets, @shingless) do %>
+              <tr id="dino-list">
+                <th scope="row"> <%= tweet.tweetid %> </th>
+                <td> <%= tweet.username %> </td>
+                <td  class="text-break" style="max-width: 750px"> <%= tweet.text %> </td>
+                <td> <%= tweet.similarity %> </td>
+                <td style="min-width: 150px;"> 
+                  <%= for {word1, word2, word3} <- shingles do %>
+                    <%= "#{word1} #{word2} #{word3}"%><br>
+                  <% end %> 
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+        <script src="<%= Routes.static_path(@conn, "/js/match.js") %>" ></script>
+        <script src="http://code.highcharts.com/highcharts.js"></script>
+        <script src="http://code.highcharts.com/modules/exporting.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        </body>
+</html>

@@ -1,0 +1,227 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>Dashboard Template · Bootstrap</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+    </style>
+
+    <script> </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-nav navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+      <div id="container" style="margin: 0 auto; min-width: 200px;">
+        <div class="row" style="inner-margin: 5px;">
+          <div class="col" style="margin: 0 auto"><img src="<%= Routes.static_path(@conn, "/images/Hambat.png") %>" class="rounded" style="width: 50px;"></div>
+        
+          <div class="col" style="margin: 0 auto"><a class="display-4 text-white text-center text-decoration-none" href=<%= Routes.page_path(@conn, :index) %>>Hamstone</a></div>
+        </div>
+      </div>
+    </nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <main role="main" class="col ml-sm-auto px-4">
+
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Dashboard</h1>
+      </div>
+
+      <div id="container" style="min-width: 310px; height: 300px; margin: 0 auto">
+        <div class="row"  style="height: 100px;"></div>
+        <div id="row justify-content-center">
+          <h1 class="display-1 text-center">#<%= @tweet_count%> Tweets in total</h1>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row" style="margin: 0 auto">
+          <div class="col w-100" style="margin: 0 auto">
+            <nav class="navbar navbar-expand-lg navbar-white">
+              <div class="row" style="margin: 0 auto">
+                <ul class="navbar-nav w-100">
+                  <%# <li class="col-1 nav-item dropdown" style="position: absolute; bottom: -10px;">
+                    <a class="nav-link dropdown-toggle text-secondary" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Sorted By [Something]
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                      <a class="dropdown-item" href="#">Sort by ID</a>
+                      <a class="dropdown-item" href="#">Sort By Time</a>
+                      <a class="dropdown-item" href="#">Sort by Username</a>
+                    </div>
+                  </li> %>
+                  <%# <li class="col nav-item">
+                    <form class="form-inline">
+                      <input class="form-control mr-sm-2 w-100" type="search" placeholder="Search by [Something]" aria-label="Search">
+                    </form>
+                  </li> %>
+                  <li class="col-11"></li>
+                  <div class="btn-group" role="group" style="max-height: 36px;">
+                    <%= form_for @conn, Routes.tweet_info_path(@conn, :scrape), [as: :scrape, id: "scrape-form", hidden: true], fn f -> %>
+                      <%= hidden_input f, :redirect_to, value: @conn.request_path %>
+                    <% end %>
+                    <%# <button type="button" class="btn btn-sm btn-outline-secondary">Search by [Something]</button>
+                    <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="#">Search by Content</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#">Search by Username</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#">Search by ID</a>
+                    </div> %>
+                    <%# <button type="button" class="btn btn-sm btn-outline-secondary" title="Search for Similar Tweets">Search Similar Tweets</button> %>
+                    <%= if @busy do %>
+                      <button type="button" class="btn btn-sm btn-secondary" disabled>
+                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                        Loading...
+                      </button>
+                      <%= form_for @conn, Routes.page_path(@conn, :stop_scraping), [as: :stop_scraping, id: "end-form", hidden: true], fn f -> %>
+                      <%= hidden_input f, :redirect_to, value: @conn.request_path %>
+                      <% end %>
+                      <button type="button" class="btn btn-sm btn-danger" onclick="document.getElementById('end-form').submit(); return false;">End</button>
+                    <% else %>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" title="Get Fresh Tweets" onclick="document.getElementById('scrape-form').submit(); return false;">Refresh Tweets</button>
+                    <% end %>
+                  </div>
+                </ul>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="table">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Tweet ID</th> 
+              <th scope="col">User</th>
+              <th scope="col">Content</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= for tweet <- @tweets do %>
+              <tr>
+                <th scope="row"> <%= tweet.tweetid %> </th>
+                <td> <%= tweet.username %> </td>
+                <td class="text-break" style="max-width: 750px"> <%= tweet.text %> </td>
+                <td>
+                  <div class="btn-group" role="group">
+                    <a  href="<%= Routes.similar_tweet_path(@conn, :show, tweet.id) %>"><button class="btn btn-sm btn-info">Search</button></a>
+                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target= <%= "#modify#{tweet.id}" %> >Modify</button>
+                    <div class="modal fade" id=<%= "modify#{tweet.id}" %> role="dialog">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 class="modal-title">Modify Tweet of <%= tweet.username %></h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          </div>
+                          <div class="modal-body">
+                            <%= tag :input, class: "form-control w-100", type: "search", placeholder: "New Tweet", value: tweet.text, id: "modify-input-#{tweet.id}", "aria-label": "NewTweet" %>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                            <%= form_for @conn, Routes.page_path(@conn, :modify_tweet, tweet.id), [as: :tweet_info, id: "modify-tweet-form-#{tweet.id}", hidden: true, method: "put"], fn f -> %>
+                              <%= hidden_input f, :redirect_to, value: @conn.request_path %>
+                              <%= hidden_input f, :tweetid, value: tweet.tweetid %>
+                              <%= hidden_input f, :username, value: tweet.username %>
+                              <%= hidden_input f, :text, value: "haha", id: "modify-form-text-#{tweet.id}" %>
+                            <% end %>
+                            <%= content_tag :button, "Submit Change",
+                                  type: "button",
+                                  class: "btn btn-primary",
+                                  onclick: "var text=document.getElementById('modify-input-#{tweet.id}').value;
+                                            document.getElementById('modify-form-text-#{tweet.id}').value=text;
+                                            document.getElementById('modify-tweet-form-#{tweet.id}').submit();
+                                            return false;" %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <%= form_for @conn, Routes.page_path(@conn, :delete_tweet, tweet.id), [as: :delete_form, id: "delete-tweet-form-#{tweet.id}", hidden: true, method: "delete"], fn f -> %>
+                      <%= hidden_input f, :redirect_to, value: @conn.request_path %>
+                    <% end %>
+                    <%= content_tag :button, "Delete",
+                          type: "button",
+                          class: "btn btn-sm btn-danger",
+                          onclick: "document.getElementById('delete-tweet-form-#{tweet.id}').submit(); return false;" %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+          <%= if @base_index == 1 do %>
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+          <% else %>
+            <li class="page-item">
+              <a class="page-link" href= <%= Routes.page_path(@conn, :show_page, @base_index - 5) %> >Previous</a>
+            </li>
+          <% end %>
+
+            <%= for i <- [0,1,2,3,4] do %>
+              <%= if (@base_index + i - 1)*100 >= @tweet_count do %>
+                <li class="page-item disabled"><a class="page-link" href="#" aria-disabled="true"><%= @base_index + i %></a></li>
+              <% else %>
+                <li class="page-item"><a class="page-link" href= <%= Routes.page_path(@conn, :show_page, @base_index + i) %> ><%= @base_index + i %></a></li>
+              <% end %>
+            <% end %>
+
+          <%= if (@base_index + 4)*100 >= @tweet_count do %>
+            <li class="page-item disabled">
+              <a class="page-link" href="#" aria-disabled="true">Next</a>
+            </li>
+          <% else %>
+            <li class="page-item">
+              <a class="page-link" href= <%= Routes.page_path(@conn, :show_page, @base_index + 5) %> >Next</a>
+            </li>
+          <% end %>
+        </ul>
+    </nav>
+    </main>
+  </div>
+</div>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+
+        <script src="http://code.highcharts.com/highcharts.js"></script>
+        <script src="http://code.highcharts.com/modules/exporting.js"></script>
+        
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        </body>
+</html>
